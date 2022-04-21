@@ -8,16 +8,16 @@
 #include <string>
 
 #include "libs/json.hpp"
-#include "libs/HTTPRequest.hpp"
+#include "libs/kidCurl.hpp"
 
-#include "LavaExceptions.hpp"
+#include "lava/LavaExceptions.hpp"
+#include "lava/LavaEndpoints.hpp"
 
 namespace lava
 {
     class LavaAPI
     {
         private:
-            std::string token;
 			void Validate(nlohmann::json json);
 		public:
 			LavaAPI(std::string token)
@@ -26,7 +26,10 @@ namespace lava
 			}
 
 			std::string APIGateway = "https://api.lava.ru";
+	        std::string token;
+
 			void SetAPIGateway(std::string gateway);
+	        void SetToken(std::string token);
 
 			void Ping();
 			nlohmann::json WalletsList();
@@ -37,6 +40,7 @@ namespace lava
 	        nlohmann::json NewTransfer(nlohmann::json params);
 	        nlohmann::json TransferInfo(nlohmann::json params);
 
+			nlohmann::json TransactionsList(nlohmann::json params);
 			nlohmann::json TransactionsList();
 
 		    nlohmann::json NewInvoice(nlohmann::json params);

@@ -43,24 +43,26 @@ namespace lava
 		APIGateway = gateway;
 	}
 
+	void LavaAPI::SetToken(std::string token)
+	{
+		token = token;
+	}
+
 	void LavaAPI::Ping()
 	{
-		http::Request request{APIGateway + "/test/ping"};
-
-		const auto response = request.send("GET", "", {{"Authorization", token}});
-		std::string body = std::string{response.body.begin(), response.body.end()};
-		auto json = nlohmann::json::parse(body);
+		kidCurl reqHandler;
+		auto req = reqHandler.Send(kidCurl::Type::GET, APIGateway + LAVA_ENDPOINT_PING, "", {}, {{"Authorization", token}});
+		auto json = nlohmann::json::parse(req->body);
 
 		Validate(json);
 	}
 
+
 	nlohmann::json LavaAPI::WalletsList()
 	{
-		http::Request request{APIGateway + "/wallet/list"};
-
-		const auto response = request.send("GET", "", {{"Authorization", token}});
-		std::string body = std::string{response.body.begin(), response.body.end()};
-		auto json = nlohmann::json::parse(body);
+		kidCurl reqHandler;
+		auto req = reqHandler.Send(kidCurl::Type::GET, APIGateway + LAVA_ENDPOINT_WALLETS_LIST, "", {}, {{"Authorization", token}});
+		auto json = nlohmann::json::parse(req->body);
 
 		Validate(json);
 		return json;
@@ -68,11 +70,9 @@ namespace lava
 
 	nlohmann::json LavaAPI::NewWithdraw(nlohmann::json params)
 	{
-		http::Request request{APIGateway + "/wallet/list"};
-
-		const auto response = request.send("POST", params.dump(), {{"Authorization", token}});
-		std::string body = std::string{response.body.begin(), response.body.end()};
-		auto json = nlohmann::json::parse(body);
+		kidCurl reqHandler;
+		auto req = reqHandler.Send(kidCurl::Type::POST, APIGateway + LAVA_ENDPOINT_WITHDRAW_CREATE, params.dump(), {}, {{"Authorization", token}});
+		auto json = nlohmann::json::parse(req->body);
 
 		Validate(json);
 		return json;
@@ -80,11 +80,9 @@ namespace lava
 
 	nlohmann::json LavaAPI::WithdrawInfo(nlohmann::json params)
 	{
-		http::Request request{APIGateway + "/wallet/info"};
-
-		const auto response = request.send("POST", params.dump(), {{"Authorization", token}});
-		std::string body = std::string{response.body.begin(), response.body.end()};
-		auto json = nlohmann::json::parse(body);
+		kidCurl reqHandler;
+		auto req = reqHandler.Send(kidCurl::Type::POST, APIGateway + LAVA_ENDPOINT_WITHDRAW_INFO, params.dump(), {}, {{"Authorization", token}});
+		auto json = nlohmann::json::parse(req->body);
 
 		Validate(json);
 		return json;
@@ -92,11 +90,9 @@ namespace lava
 
 	nlohmann::json LavaAPI::NewTransfer(nlohmann::json params)
 	{
-		http::Request request{APIGateway + "/transfer/create"};
-
-		const auto response = request.send("POST", params.dump(), {{"Authorization", token}});
-		std::string body = std::string{response.body.begin(), response.body.end()};
-		auto json = nlohmann::json::parse(body);
+		kidCurl reqHandler;
+		auto req = reqHandler.Send(kidCurl::Type::POST, APIGateway + LAVA_ENDPOINT_TRANSFER_CREATE, params.dump(), {}, {{"Authorization", token}});
+		auto json = nlohmann::json::parse(req->body);
 
 		Validate(json);
 		return json;
@@ -104,11 +100,19 @@ namespace lava
 
 	nlohmann::json LavaAPI::TransferInfo(nlohmann::json params)
 	{
-		http::Request request{APIGateway + "/transfer/info"};
+		kidCurl reqHandler;
+		auto req = reqHandler.Send(kidCurl::Type::POST, APIGateway + LAVA_ENDPOINT_TRANSFER_INFO, params.dump(), {}, {{"Authorization", token}});
+		auto json = nlohmann::json::parse(req->body);
 
-		const auto response = request.send("POST", params.dump(), {{"Authorization", token}});
-		std::string body = std::string{response.body.begin(), response.body.end()};
-		auto json = nlohmann::json::parse(body);
+		Validate(json);
+		return json;
+	}
+
+	nlohmann::json LavaAPI::TransactionsList(nlohmann::json params)
+	{
+		kidCurl reqHandler;
+		auto req = reqHandler.Send(kidCurl::Type::POST, APIGateway + LAVA_ENDPOINT_TRANSACTIONS_LIST, params.dump(), {}, {{"Authorization", token}});
+		auto json = nlohmann::json::parse(req->body);
 
 		Validate(json);
 		return json;
@@ -116,11 +120,9 @@ namespace lava
 
 	nlohmann::json LavaAPI::TransactionsList()
 	{
-		http::Request request{APIGateway + "/transactions/list"};
-
-		const auto response = request.send("POST", "", {{"Authorization", token}});
-		std::string body = std::string{response.body.begin(), response.body.end()};
-		auto json = nlohmann::json::parse(body);
+		kidCurl reqHandler;
+		auto req = reqHandler.Send(kidCurl::Type::POST, APIGateway + LAVA_ENDPOINT_TRANSACTIONS_LIST, "", {}, {{"Authorization", token}});
+		auto json = nlohmann::json::parse(req->body);
 
 		Validate(json);
 		return json;
@@ -128,11 +130,9 @@ namespace lava
 
 	nlohmann::json LavaAPI::NewInvoice(nlohmann::json params)
 	{
-		http::Request request{APIGateway + "/invoice/create"};
-
-		const auto response = request.send("POST", params.dump(), {{"Authorization", token}});
-		std::string body = std::string{response.body.begin(), response.body.end()};
-		auto json = nlohmann::json::parse(body);
+		kidCurl reqHandler;
+		auto req = reqHandler.Send(kidCurl::Type::POST, APIGateway + LAVA_ENDPOINT_INVOICE_CREATE, "", {}, {{"Authorization", token}});
+		auto json = nlohmann::json::parse(req->body);
 
 		Validate(json);
 		return json;
@@ -140,11 +140,9 @@ namespace lava
 
 	nlohmann::json LavaAPI::InvoiceInfo(nlohmann::json params)
 	{
-		http::Request request{APIGateway + "/invoice/info"};
-
-		const auto response = request.send("POST", params.dump(), {{"Authorization", token}});
-		std::string body = std::string{response.body.begin(), response.body.end()};
-		auto json = nlohmann::json::parse(body);
+		kidCurl reqHandler;
+		auto req = reqHandler.Send(kidCurl::Type::POST, APIGateway + LAVA_ENDPOINT_INVOICE_INFO, "", {}, {{"Authorization", token}});
+		auto json = nlohmann::json::parse(req->body);
 
 		Validate(json);
 		return json;
@@ -152,11 +150,9 @@ namespace lava
 
 	nlohmann::json LavaAPI::InvoiceSetWebhook(nlohmann::json params)
 	{
-		http::Request request{APIGateway + "/invoice/set-webhook"};
-
-		const auto response = request.send("POST", params.dump(), {{"Authorization", token}});
-		std::string body = std::string{response.body.begin(), response.body.end()};
-		auto json = nlohmann::json::parse(body);
+		kidCurl reqHandler;
+		auto req = reqHandler.Send(kidCurl::Type::POST, APIGateway + LAVA_ENDPOINT_INVOICE_SET_WEBHOOK, "", {}, {{"Authorization", token}});
+		auto json = nlohmann::json::parse(req->body);
 
 		Validate(json);
 		return json;
@@ -164,11 +160,9 @@ namespace lava
 
 	nlohmann::json LavaAPI::InvoiceGenerateSecret()
 	{
-		http::Request request{APIGateway + "/invoice/generate-secret-key"};
-
-		const auto response = request.send("GET", "", {{"Authorization", token}});
-		std::string body = std::string{response.body.begin(), response.body.end()};
-		auto json = nlohmann::json::parse(body);
+		kidCurl reqHandler;
+		auto req = reqHandler.Send(kidCurl::Type::GET, APIGateway + LAVA_ENDPOINT_INVOICE_GENERATE_SECRET, "", {}, {{"Authorization", token}});
+		auto json = nlohmann::json::parse(req->body);
 
 		Validate(json);
 		return json;

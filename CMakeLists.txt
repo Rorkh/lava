@@ -3,7 +3,7 @@ project(lava)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_library(lava SHARED libs/json.hpp libs/HTTPRequest.hpp LavaExceptions.hpp LavaAPI.cpp LavaAPI.hpp)
+add_library(lava SHARED libs/json.hpp libs/kidCurl.hpp lava/LavaExceptions.hpp LavaAPI.cpp LavaAPI.hpp lava/LavaEndpoints.hpp)
 
 find_package (CURL)
 if (CURL_FOUND)
